@@ -1,0 +1,196 @@
+---
+title: "Assignment 1"
+author: "Vikash Kumar Pandey(MT18086)"
+date: "Sep 3, 2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+                                            
+
+
+
+##Climate Change - 
+
+Include some Libraries
+```{r}
+library(ggplot2)
+library("RColorBrewer")
+library("gplots")
+library(readr) 
+library(dplyr) 
+library(tidyr) 
+library(gridExtra)
+library(grid)
+library(plyr)
+library(GGally)
+
+```
+Set working directoy and Read  files
+```{r}
+setwd("C:/Users/Vikas/Desktop/Assign_Dsc/A1/Dataset_02_19")
+getwd()
+```
+Here I want to show the incerement in the air mean temperature and surface temperature of earth over the year by simlple density histogram.
+The data sources uRL = https://datahub.io/core/global-temp#data.
+```{r}
+temperature_global_data = read.csv("air_temperature.csv")
+ggplot(data=temperature_global_data,aes(x=Year,y=Mean,fill=Mean)) + 
+geom_bar(colour='black',stat='identity') + 
+theme_bw()+
+ggtitle('Global Mean Air Temprature per year') +
+theme(axis.text.x = element_text(angle=45,hjust=1),
+      plot.title = element_text(hjust=0.5)) + 
+scale_fill_distiller(palette = 'YlGnBu')
+
+```
+
+```{r}
+land_sea_temperature = read.csv("land_sea_temp.csv",header= TRUE)
+```
+
+```{r}
+# land_sea_temperature
+ggplot(data=land_sea_temperature,aes(x=Year,y=Jan,fill=Year)) +
+geom_bar(colour='black',stat='identity') + 
+theme_bw()+
+ggtitle('Global Mean surface Temprature per year') +
+theme(axis.text.x = element_text(angle=45,hjust=1),
+      plot.title = element_text(hjust=0.5)) + 
+scale_fill_distiller(palette = 'YlGnBu')
+
+
+ggplot(data=land_sea_temperature,aes(x=Year,y=May,fill=Year)) +
+geom_bar(colour='black',stat='identity') + 
+theme_bw()+
+ggtitle('Global Mean surface Temprature per year') +
+theme(axis.text.x = element_text(angle=45,hjust=1),
+      plot.title = element_text(hjust=0.5)) + 
+scale_fill_distiller(palette = 'YlGnBu')
+```
+##Insights -
+From the temperature analysis, the average global temperature on Earth has increased by about 0.8 degree celsius since 1880 which can shown in graph. The dataset is taken from NASA earth observetry center.  
+A one-degree global change is significant because it takes a vast amount of heat to warm all the oceans, atmosphere, and land by that much. In the past, a one- to two-degree drop was all it took to plunge the Earth into the Little Ice Age. A five-degree drop was enough to bury a large part of North America under a towering mass of ice 20,000 years ago.
+
+```{r}
+```
+```{r}
+# temperature_year = land_sea_temperature[1]
+# df = land_sea_temperature[,-1]
+
+```
+
+```{r}
+temp_global = read.csv("temp_global.csv", header = TRUE)
+temp_year <- temp_global[,1]
+temp_global = temp_global[,-1]
+mat_data <- as.matrix(temp_global)
+rownames(mat_data) <- temp_year
+my_palette <- colorRampPalette(c("blue", "#0099ff", "yellow","red"))(n = 299)
+heatmap.2(mat_data, scale = "none", col =  my_palette, 
+          trace = "none", density.info = "none", main = "Global Land sea Temperature")
+```
+The above diagram shows the incrising rate in temperature over the year.
+
+
+```{r}
+#Glaciers
+#DataSource : URL= https://datahub.io/core/glacier-mass-balance#data
+
+galciers =read.csv("glaciers_global.csv")
+gg <- ggplot(galciers, aes(x=Year, y=Mean.cumulative.mass.balance
+, color=Mean.cumulative.mass.balance)) + geom_point() + labs(title="Average Mass of Mesured Glacier", x="Year", y="Mean accumulative mass balance")  
+print(gg)
+```
+##Insights- 
+Due to increas in temperature the glaicier is also lossing its mass.
+The graph is shows that cumulative change in mass balance of a set of “reference” glaciers worldwide beginning in 1945. The values represents the average of all the glaciers that were measured. Negative values indicate a net loss of ice and snow compared with the base year of 1945. For consistency, measurements are in meters of water equivalent, which represent changes in the average thickness of a glacier.
+
+Scientists are discovering that production of electricity using coal and petroleum, and other uses of fossil fuels in transportation and industry, affects our environment in ways we did not understand before. Within the past 200 years or so, human activity has increased the amount of carbon dioxide in the atmosphere by 40 percent, and other gases, such as methane (natural gas) by a factor of 2 to 3 or more. These gases absorb heat being radiated from the surface of the earth, and by absorbing this heat the atmosphere slowly warms up.
+
+```{r}
+
+```
+
+
+```{r}
+# Dataset for global Sea_level
+# URL:https://datahub.io/core/sea-level-rise
+sea_level = read.csv("sea_level.csv",header= TRUE)
+gg <- ggplot(sea_level, aes(x=Date, y=Sea_Height_variation_in_mm, color=Sea_Height_variation_in_mm)) + geom_point() + labs(title="global Sea_level", x="Year", y="Sea_Height_variation_in_mm")  
+print(gg)
+```
+##Insights-
+The world is warming because humans are emitting heat-trapping greenhouse gases. We know this for certain, the science on this question is settled. Humans emit greenhouse gases, those gases should warm the planet, and we know the planet is warming.
+Sea level has been rising over the past century, and the rate has increased in recent decades. In 2017, global mean sea level was 3 inches (77 millimeters) above the 1993 average—the highest annual average in the satellite record (1993-present). It was the sixth consecutive year, and the 22nd out of the last 24 years in which global mean sea level increased relative to the previous year.
+In the United States, almost 40 percent of the population lives in relatively high population-density coastal areas, where increase in sea level plays a vital role in flooding, shoreline erosion, and hazards from storms.
+```{r}
+#For converting dataframe into time_series 
+# library(zoo)
+# x<-as.ts(read.zoo(land_sea_temperature, FUN = as.yearmon))
+```
+
+
+```{r, echo = FALSE, warning=FALSE}
+
+#C02 emmisions
+co2 <- read_csv("co2.csv")
+co2 <- co2[,-c(1, 4, 6)]
+adjusted_co2 <- co2 %>%
+    mutate(Year = as.integer(YYYYMM/100))
+adjusted_co2 <- subset(adjusted_co2, adjusted_co2$Year < 2016)
+ggplot(adjusted_co2, aes(x = Year, y = Value, col = factor(Description))) + geom_line() +
+    xlab("Year") +
+    ylab("CO2 emissions (in millions of metric tons)") +
+    ggtitle("Univariate-plot of Globally CO2 Emissions") +
+    scale_colour_discrete(name = "Samples", labels = c("Total", "Coal", "Natural Gas", "Distillate Fuel", "Petroleum Coke", "Geothermal", "Non-Biomass Waste"))
+```
+##Insights - 
+The graph clearly shows that the Higher levels of CO2.
+The Higher levels of CO2 can affect crop yields. Many weeds, pests, and fungi thrive under warmer temperatures, wetter climates, and increased CO2 levels. Currently, U.S. farmers spend more than $11 billion per year to fight weeds, which compete with crops for light, water, and nutrients.
+
+Though rising CO2 can stimulate plant growth, it also reduces the nutritional value of most food crops. Rising levels of atmospheric CO2 reduce the concentrations of protein and essential minerals in most plant species, including wheat, soybeans, and rice. This direct effect of rising CO2 on the nutritional value of crops represents a potential threat to human health.So we have to better find a way to stop the level of CO2 emmisions. 
+
+```{r}
+#Bihar Rain-Fall
+bihar = read.csv("bihar_rainfall.csv", header = TRUE)
+rainfall_year <- bihar[,1]
+bihar = bihar[,-1]
+mat_data <- as.matrix(bihar)
+rownames(mat_data) <- rainfall_year
+my_palette <- colorRampPalette(c("whitesmoke","#FFFFCC","slategray1",
+"skyblue","turquoise","turquoise4", "purple4"))(n = 299)
+heatmap.2(mat_data, scale = "none", col =  my_palette, 
+          trace = "none", density.info = "none",  main = "Bihar Rain Fall(mm)")
+```
+##Insights - 
+The rainfall in Bihar is decresed in recent years. Because of it farmers are not able to successfull feed their crops which is a not good for us. Monsoon delay is majer crieses for bihar.
+
+```{r}
+#Meghalaya Rain-Fall
+meghalaya = read.csv("meghalaya.csv", header = TRUE)
+rainfall_year <- meghalaya[,1]
+meghalaya = meghalaya[,-1]
+mat_data <- as.matrix(meghalaya)
+rownames(mat_data) <- rainfall_year
+my_palette <- colorRampPalette(c("whitesmoke","#FFFFCC","slategray1",
+"skyblue","turquoise","turquoise4", "purple4"))(n = 299)
+heatmap.2(mat_data, scale = "none", col =  my_palette, 
+          trace = "none", density.info = "none", main = "Meghalaya Rain Fall(mm)")
+```
+Rain in meghalaya has been incresed in some resent years due to this unbehavioral session of moonsoon flood damage has been incresed and lots of damage done.
+
+How this all can affects it.
+The mortaility rate has been increased.
+The poverty rate is also has get increased.
+The graph is shown below show the how the mortaility rate is change with corelation of different years.  
+```{r}
+all_data =  read.csv("mortaility.csv", header = TRUE)
+```
+
+```{r}
+ggpairs(data = all_data, title = "Mortality rate, under-5 (per 1,000 live births)", upper = list(continuous = wrap("cor", size = 5)), 
+        lower = list(continuous = "smooth"),)
+
+```
+
